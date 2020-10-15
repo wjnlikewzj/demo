@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- namespace="UserMapper"用来指定是哪一个mapper文件 ,与其他的mapper不能重复-->
+<!-- id：用来配合namespace来定位sql语句，在同一个mapper不能重复
+	 resultType：用来指定查询语句的结果集类型，如果是多条记录，会自动包装为对应的list集合
+	 			要求model的属性名与数据库的列名一致（同名匹配原则）
+	 resultMap="userMap" :解决数据库列名与属性名不一致的问题，可以自定义返回结果集
+ 	 javaType="" jdbcType="" ：指定java中类型和数据库里的类型，可以进行数据转换
+	 parameterType :指定sql里需要的参数类型，如果传的是model，可以用#{属性名}来取值
+	 				如果传入的参数类型是一个 字符串或者基本数据类型，可以用#{任意值}取值
+	 				一般情况下我们可以省略参数类型，但是开发中建议写
+ -->
+<mapper namespace="com.zhiyou.dao.UserDao">
+	
+	<insert id="add" parameterType="com.zhiyou.model.User">
+		insert into user values(#{id},#{name},#{money},#{password})
+	</insert>
+	
+	<delete id="delete">
+		delete from user where id=#{id};
+	</delete>
+	
+	
+	
+	<update id="update">
+		update user set name=#{name},password=#{password},money=#{money}
+		where id=#{id}
+	</update>
+	
+
+	
+	<!-- model类的属性与数据库列名对应，解决属性名与列名不一致的问题 -->
+	<resultMap type="com.zhiyou.model.User" id="userMap">
+		<id column="id" property="id" />
+		<result column="name" property="name"/>
+		<result column="password" property="password"/>
+		<result column="money" property="money"/>
+	</resultMap>
+	
+	<select id="select" resultMap="userMap">
+		<include refid="aaa"></include>
+	</select>
+	
+	<sql id="aaa">
+		select * from user
+	</sql>
+
+	
+	
+	<select id="selectById" resultMap="userMap">
+		select * from user where id= #{id}
+	</select>
+
+</mapper>
+
+
+
+

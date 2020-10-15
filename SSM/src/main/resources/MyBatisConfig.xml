@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+    
+    <configuration>
+    	<!-- 加载属性文件 -->
+<!--     	<properties resource="db.properties"/> -->
+		
+		<!-- 设置MyBatis -->
+		
+		
+		
+		<settings>
+			<setting name="cacheEnabled" value="true"/>
+		</settings>
+		<!-- 指定类型别名 -->
+		<typeAliases>
+			<typeAlias type="com.zhiyou.model.User" alias="user"/>
+		</typeAliases>
+		
+		<plugins>
+			<plugin interceptor="com.github.pagehelper.PageInterceptor"/>
+		</plugins>
+		
+    	
+    </configuration>
+
+
+

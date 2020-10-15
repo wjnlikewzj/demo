@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+        
+	<context:component-scan base-package="com.zhiyou" />
+
+	<!-- 1:加载属性文件到这里面 -->
+	<util:properties id="db" location="classpath:db.properties" />
+
+	<!-- 2:配置数据库连接池 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<!-- 3：通过set注入将数据库连接信息注入到类的实例对象中 -->
+		<property name="driverClassName" value="#{db.driver}" />
+		<property name="url" value="#{db.url}" />
+		<property name="username" value="#{db.username}" />
+		<property name="password" value="#{db.password}" />
+	</bean>
+	
+	<!-- 加载SQLSessionFactory -->
+	<bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<!-- 告知MyBatis总配置文件在哪 -->
+		<property name="configLocation" value="classpath:MyBatisConfig.xml"/>
+		<!-- 告知小mapper文件在哪 -->
+		<property name="mapperLocations" value="classpath:mapper/*.xml"/>
+	</bean>
+	
+	<!-- 配置mapper接口 ，用于给接口创建代理类对象-->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- 告知接口的路径 -->
+		<property name="basePackage" value="com.zhiyou.dao"/>
+		<!-- 需要使用SQLSession才能给接口创建代理类对象 -->
+		<property name="sqlSessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	
+	 
+
+
+</beans>
